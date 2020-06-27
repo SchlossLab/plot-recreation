@@ -303,13 +303,9 @@ inset <- rides %>%
     ggplot(aes(year, sum_distance_mi)) + 
   geom_bar(stat = "Identity", fill = "skyblue2", alpha = 0.7) + 
     labs(y='Total Distance (mi)') +
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.05))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   theme_minimal_hgrid(11)
-```
 
-    ## Warning: `expand_scale()` is deprecated; use `expansion()` instead.
-
-``` r
 ggdraw(plot_point + theme_half_open(12)) +
   draw_plot(inset, x = 0.1, y = .45, width = .5, height = .5) +
   draw_plot_label(
@@ -338,7 +334,7 @@ plot_col <- alpha_data %>%
     ggplot(aes(sample, otu_count)) +
   geom_col(fill = "#6297E770") + 
   scale_y_continuous(
-    #expand = expand_scale(mult = c(0, 0.05)),
+    #expand = expansion(mult = c(0, 0.05)),
     position = "right"
   ) +
     scale_x_discrete() +
@@ -391,14 +387,9 @@ p1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) +
 # plot 2
 p2 <- ggplot(iris, aes(Sepal.Length, fill = Species)) +
   geom_density(alpha = .7) + 
-  scale_y_continuous(expand = expand_scale(mult = c(0, 0.05))) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   theme_half_open(12) +
   theme(legend.justification = "top")
-```
-
-    ## Warning: `expand_scale()` is deprecated; use `expansion()` instead.
-
-``` r
 p2a <- p2 + theme(legend.position = "none")
 
 # plot 3
