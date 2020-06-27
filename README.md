@@ -107,7 +107,7 @@ otu_table <- tibble(
     otu = c("A", "A", "A", "B", "B", "B"),
     abun = c(5, 15, 6, 15, 5, 2)
 )
-palette = RColorBrewer::brewer.pal(n = 4, name = "Paired")
+palette = brewer.pal(n = 4, name = "Paired")
 colors = c(
   A = palette[[2]],
   B = palette[[3]]
@@ -300,7 +300,7 @@ plot_grid(time_plot_clust, time_plot_fit,
 Source:
 <https://github.com/SchlossLab/OptiFitAnalysis/tree/master/exploratory/2020#performance-as-measured-by-runtime>
 
-### One title for two plots in a figure
+### One title for two plots
 
 ``` r
 mph_per_kph <- 0.621371
