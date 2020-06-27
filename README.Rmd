@@ -1,0 +1,23 @@
+---
+output: 
+    github_document:
+        html_preview: false
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.path = 'figures/')
+```
+```{r libs}
+library(tidyverse)
+theme_set(theme_classic())
+```
+
+# plot-recreation
+
+<!-- badges: start -->
+<!-- badges: end -->
+Re-creating plots to learn cool tricks and practice problem-solving.
+
