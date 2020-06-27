@@ -10,10 +10,14 @@ output:
 knitr::opts_chunk$set(echo = TRUE,
                       fig.path = 'figures/')
 ```
-```{r libs}
+```{r libs, message=FALSE}
 library(cowplot)
+library(glue)
+library(ggtext)
+library(gridtext)
 library(here)
 library(magick)
+library(RColorBrewer)
 library(tidyverse)
 ```
 
@@ -28,78 +32,280 @@ Re-creating plots to learn cool tricks and practice problem-solving.
 View the plots below and try to write the code that creates them!
 There are more exercises here than you can probably get to in the time allotted.
 Just pick ones to work on based on how interested you are in learning how to create it.
+These are roughly arranged so that later plots build on earlier plots (sometimes),
+but feel free to jump around.
 At the end, we'll each share one solution.
 
 As much as this is an exercise in data viz with R, it's also an exercise in finding solutions in package documentation and general problem-solving.
+Google is your friend!
 If you get stuck, take a look at the [hints](hints.md) or send Kelly a message in Slack.
 
 ### Formatting text
 
 #### Italics
 
-#### Color
-
-### Plot on an image
-
-```{r}
-
+```{r otu_italics}
+otu_data <- tribble(~otu, ~bact, ~value,
+                       1, 'Staphylococceae', -0.5,
+                       2, 'Moraxella', 0.5,
+                       3, 'Streptococcus', 2,
+                       4, 'Acinetobacter', 3.0
+                    ) %>% mutate(name = glue("*{bact}* (OTU {otu})"))
+otu_data %>% 
+    ggplot(aes(name, value)) +
+    geom_col() + 
+    coord_flip() +
+    theme(axis.text.y = element_markdown())
 ```
+
+Source: [Claus Wilke's talk at rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
+
+#### Color axis text
+
+```{r otu_color}
+# make some fake data
+otu_data <- otu_data %>% 
+    mutate(color = brewer.pal(4, "Dark2"),
+           name = glue("<i style='color:{color}'>{bact}</i> (OTU {otu})"))
+# plot it
+otu_data %>% 
+    ggplot(aes(name, value)) +
+    geom_col() + 
+    coord_flip() +
+    theme(axis.text.y = element_markdown())
+```
+
+Source: [Claus Wilke's talk at rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
+
+
+#### Color & bold axis label
+
+```{r candidemia_color}
+# make some fake data
+time_data <-tibble(time = seq(0,5,0.1),
+               yes = sin(time * 0.8) + 0.8,
+               no = sin(time * -0.5) + 1
+                ) %>% pivot_longer(-time, names_to = "infected", values_to = "value")
+# plot it
+time_data %>% ggplot(aes(x = time, y = value, color = infected)) +
+    geom_line() +
+    ylab("<b style='color:#00BFC4'>Candidemia</b> vs. <b style='color:#F8766D'>no Candidemia</b> ITS1 diversity") +
+    theme_classic() +
+    theme(legend.position = "None",
+          axis.title.y = element_markdown())
+```
+
+Inspiration: fig. 2 from Jay's recent JC paper [Zhai et al 2018 Nature Med](https://www.nature.com/articles/s41591-019-0709-7/figures/2)
+
+### Assign colors manually
+
+```{r color_manual}
+otu_table <- tibble(
+    sample = c("1", "2", "3", "1", "2", "3"),
+    otu = c("A", "A", "A", "B", "B", "B"),
+    abun = c(5, 15, 6, 15, 5, 2)
+)
+palette = RColorBrewer::brewer.pal(n = 4, name = "Paired")
+colors = c(
+  A = palette[[2]],
+  B = palette[[3]]
+)
+
+# plot total counts (aboslute abundace)
+otu_table %>%
+    ggplot(aes(x = sample, y = abun, fill = otu)) +
+    geom_col() +
+    scale_fill_manual("otu", values=colors) +
+    ylab("Total bacteria") +
+    theme_classic()
+```
+
+Adapted from: https://github.com/SchlossLab/compositional_data_analysis
 
 ### Image on a plot
 
-```{r}
-p <- ggplot(mtcars, aes(disp, mpg)) + 
-  geom_point(size = 1.5, color = "blue") +
-  theme_cowplot(12)
-
+```{r img_on_plot}
+otu_table <- tibble(
+    sample = c("1", "2", "3", "1", "2", "3"),
+    otu = c("A", "A", "A", "B", "B", "B"),
+    abun = c(5, 15, 6, 15, 5, 2)
+)
 # from https://github.com/mothur/logo
-logo_file <- here("figures","mothur_RGB.png")
+logo_file <- here("figures", "mothur_RGB.png")
+
+# plot total counts (aboslute abundace)
+plot_total <-  otu_table %>%
+    ggplot(aes(x = sample, y = abun, fill = otu)) +
+    geom_col() +
+    ylab("Total bacteria") +
+    theme_classic()
+
 
 ggdraw() + 
-  draw_plot(p) +
-  draw_image(logo_file, x = 1, y = 1, hjust = 1, vjust = 1, width = 0.13, height = 0.2)
+  draw_plot(plot_total) +
+  draw_image(logo_file, x = 1, y = 1, 
+             hjust = 1.2, vjust = 1.2, 
+             width = 0.3, height = 0.3)
 ```
+
+Adapted from: https://github.com/SchlossLab/compositional_data_analysis
+
+### Plot on an image
+
+_With great power, comes great responsibility. Use at your own risk!_ 
+
+```{r plot_on_img}
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+    filter(distance_mi > 1, as.character(type) == 'Ride', year >= 2019) %>% 
+    select(distance_mi, start_date)
+
+# source https://www.pinclipart.com/picdir/big/196-1969309_free-bicycle-bike-cartoon-no-background-clipart.png
+bike_img <- here('figures', 'bike.png') %>%
+    image_read() %>% 
+    image_colorize(70, "white")
+
+# make the plot
+rides_plot <- rides %>%
+  ggplot(aes(start_date, distance_mi)) +
+  geom_point(color='blue', alpha=0.8, size=2) +
+    theme_cowplot()
+
+ggdraw() + 
+  draw_image(bike_img) + 
+  draw_plot(rides_plot)
+```
+
+Adapted from: https://wilkelab.org/cowplot/articles/drawing_with_on_plots.html#combining-plots-and-images
 
 ### Plots in a grid
 
-### One title for two plots
+```{r plot_grid}
+benchmarks_fit <-read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/2_fit_reference_db/results/benchmarks.tsv?token=AEHR6TPPUNNM245DZ7TUP2C7ADK5E')
+benchmarks_clust <- read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/1_prep_samples/results/benchmarks.tsv?token=AEHR6TNCIGRVN3B5GEVRVNC7ADLAS')
+
+plot_box_time <- function(df) {
+  df %>%
+    group_by(dataset, method) %>%
+    ggplot(aes(x = method, y = s, color = dataset)) +
+    geom_boxplot() +
+    scale_color_discrete() +
+    facet_wrap("ref") +
+    ylim(0,2100) +
+    labs(y = 'seconds') +
+    theme_cowplot() +
+    theme(axis.title.x = element_blank())
+}
+
+time_plot_fit <- benchmarks_fit %>% 
+  plot_box_time() +
+  theme(axis.text.y = element_blank(),
+        axis.title.y = element_blank())
+
+time_plot_clust <- benchmarks_clust %>% 
+  plot_box_time() +
+  theme(legend.position = "None")
+
+plot_grid(time_plot_clust, time_plot_fit,
+          align = "h", rel_widths = c(1,3))
+```
+
+Source: https://github.com/SchlossLab/OptiFitAnalysis/tree/master/exploratory/2020#performance-as-measured-by-runtime
+
+### One title for two plots in a figure
+
+```{r one_title_grid}
+mph_per_kph <- 0.621371
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+    filter(distance_mi > 1, as.character(type) == 'Ride') %>% 
+    mutate(average_speed_mph = average_speed * mph_per_kph) %>% 
+    select(distance_mi, average_speed_mph, moving_time_hrs, start_date)
+
+# make a plot grid consisting of two panels
+p1 <- ggplot(rides, aes(x = average_speed_mph, y = distance_mi)) + 
+  geom_point(colour = "blue") + 
+  theme_half_open(12) + 
+  background_grid(minor = 'none')
+
+p2 <- ggplot(rides, aes(x = moving_time_hrs, y = distance_mi)) + 
+  geom_point(colour = "green") + 
+  theme_half_open(12) + 
+  background_grid(minor = 'none') +
+    theme(axis.title.y = element_blank())
+
+plot_row <- plot_grid(p1, p2)
+
+# now add the title
+title <- ggdraw() + 
+  draw_label(
+    "Distance travelled with average speed and time spent moving",
+    fontface = 'bold',
+    x = 0,
+    hjust = 0
+  ) +
+  theme(
+    # add margin on the left of the drawing canvas,
+    # so title is aligned with left edge of first plot
+    plot.margin = margin(0, 0, 0, 7)
+  )
+plot_grid(
+  title, plot_row,
+  ncol = 1,
+  # rel_heights values control vertical title margins
+  rel_heights = c(0.1, 1)
+)
+```
+
+Adapted from: https://wilkelab.org/cowplot/articles/plot_grid.html#joint-plot-titles
 
 ### Inset plots
 
-```{r}
-inset <- ggplot(mpg, aes(drv)) + 
-  geom_bar(fill = "skyblue2", alpha = 0.7) + 
+```{r inset}
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+    filter(distance_mi > 1, as.character(type) == 'Ride') %>% 
+    select(distance_mi, start_date, year)
+
+plot_point <- rides %>% ggplot(aes(start_date, distance_mi)) +
+  geom_point(color='red') +
+  theme_minimal_grid(12)
+
+inset <- rides %>%  
+    group_by(year) %>% 
+    summarize(sum_distance_mi=sum(distance_mi)) %>% 
+    ggplot(aes(year, sum_distance_mi)) + 
+  geom_bar(stat = "Identity", fill = "skyblue2", alpha = 0.7) + 
+    labs(y='Total Distance (mi)') +
   scale_y_continuous(expand = expand_scale(mult = c(0, 0.05))) +
   theme_minimal_hgrid(11)
 
-ggdraw(p + theme_half_open(12)) +
-  draw_plot(inset, .45, .45, .5, .5) +
+ggdraw(plot_point + theme_half_open(12)) +
+  draw_plot(inset, x = 0.1, y = .45, width = .5, height = .5) +
   draw_plot_label(
     c("A", "B"),
-    c(0, 0.45),
+    c(0, 0.1),
     c(1, 0.95),
     size = 12
   )
 ```
 
+Adapted from: https://wilkelab.org/cowplot/articles/drawing_with_on_plots.html#making-inset-plots
+
 ### Overlaying plots
 
-```{r}
-city_mpg <- mpg %>%
-  mutate(class = fct_lump(class, 4, other_level = "other")) %>%
-  group_by(class) %>%
-  summarize(
-    mean_mpg = mean(cty),
-    count = n()
-  ) %>% 
-  mutate(class = fct_reorder(class, -mean_mpg))
+```{r overlay}
+# make up some non-sensical data
+alpha_data <- tibble(sample = as.factor(1:10),
+                     otu_count = runif(10, min = 0, max = 100),
+                     alpha_div = rnorm(10, mean = 2, sd = 0.5)
+                     )
 
-p1 <- ggplot(city_mpg, aes(class, count)) +
+plot_col <- alpha_data %>%  
+    ggplot(aes(sample, otu_count)) +
   geom_col(fill = "#6297E770") + 
   scale_y_continuous(
-    expand = expand_scale(mult = c(0, 0.05)),
+    #expand = expand_scale(mult = c(0, 0.05)),
     position = "right"
   ) +
+    scale_x_discrete() +
   theme_minimal_hgrid(11, rel_small = 1) +
   theme(
     panel.grid.major = element_line(color = "#6297E770"),
@@ -111,26 +317,29 @@ p1 <- ggplot(city_mpg, aes(class, count)) +
     axis.text.y = element_text(color = "#6297E7"),
     axis.title.y = element_text(color = "#6297E7")
   )
-p1
-p2 <- ggplot(city_mpg, aes(class, mean_mpg)) + 
+
+plot_point <- alpha_data %>% ggplot(aes(sample, alpha_div)) + 
   geom_point(size = 3, color = "#D5442D") + 
-  scale_y_continuous(limits = c(10, 21)) +
+  scale_y_continuous(limits = c(0, 4.5)) +
   theme_half_open(11, rel_small = 1) +
+    scale_x_discrete() +
   theme(
     axis.ticks.y = element_line(color = "#BB2D05"),
     axis.text.y = element_text(color = "#BB2D05"),
     axis.title.y = element_text(color = "#BB2D05"),
     axis.line.y = element_line(color = "#BB2D05")
   )
-p2
-aligned_plots <- align_plots(p1, p2, align="hv", axis="tblr")
+
+aligned_plots <- align_plots(plot_col, plot_point, align="hv", axis="tblr")
 overlaid_plots <- ggdraw(aligned_plots[[1]]) + draw_plot(aligned_plots[[2]])
 overlaid_plots
 ```
 
+Source: https://wilkelab.org/cowplot/articles/aligning_plots.html
+
 ### Multi-panel figure
 
-```{r}
+```{r multi-panel}
 # plot 1
 p1 <- ggplot(iris, aes(Sepal.Length, Sepal.Width, color = Species)) + 
   geom_point() + 
@@ -172,6 +381,11 @@ bottom_row <- plot_grid(
 plot_grid(plots[[1]], bottom_row, labels = c("A"), ncol = 1)
 ```
 
+Source: https://wilkelab.org/cowplot/articles/shared_legends.html
+
 ## Solutions
 
-See the [key] branch for the solutions.
+A link to the source or inspiration is given under each code chunk. 
+See the [key](https://github.com/SchlossLab/plot-recreation/tree/key) branch for the exact solutions.
+
+Many of these are taken directly from another source, in some cases with slight modifications. The original creators' copyrights still apply; all are OSI-approved licenses.
