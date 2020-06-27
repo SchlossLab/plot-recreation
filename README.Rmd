@@ -2,6 +2,7 @@
 output: 
     github_document:
         html_preview: false
+        toc: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -31,9 +32,7 @@ Re-creating plots to learn cool tricks and practice problem-solving.
 
 View the plots below and try to write the code that creates them!
 There are more exercises here than you can probably get to in the time allotted.
-Just pick ones to work on based on how interested you are in learning how to create it.
-These are roughly arranged so that later plots build on earlier plots (sometimes),
-but feel free to jump around.
+Feel free to jump around and pick ones to work on based on how interested you are in learning how to create the plot.
 At the end, we'll each share one solution.
 
 As much as this is an exercise in data viz with R, it's also an exercise in finding solutions in package documentation and general problem-solving.

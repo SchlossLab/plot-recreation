@@ -1,4 +1,17 @@
 
+  - [plot-recreation](#plot-recreation)
+      - [Exercises](#exercises)
+          - [Formatting text](#formatting-text)
+          - [Assign colors manually](#assign-colors-manually)
+          - [Image on a plot](#image-on-a-plot)
+          - [Plot on an image](#plot-on-an-image)
+          - [Plots in a grid](#plots-in-a-grid)
+          - [One title for two plots](#one-title-for-two-plots)
+          - [Inset plots](#inset-plots)
+          - [Overlaying plots](#overlaying-plots)
+          - [Multi-panel figure](#multi-panel-figure)
+      - [Solutions](#solutions)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ``` r
@@ -24,10 +37,9 @@ Re-creating plots to learn cool tricks and practice problem-solving.
 
 View the plots below and try to write the code that creates them\! There
 are more exercises here than you can probably get to in the time
-allotted. Just pick ones to work on based on how interested you are in
-learning how to create it. These are roughly arranged so that later
-plots build on earlier plots (sometimes), but feel free to jump around.
-At the end, we’ll each share one solution.
+allotted. Feel free to jump around and pick ones to work on based on how
+interested you are in learning how to create it. At the end, we’ll each
+share one solution.
 
 As much as this is an exercise in data viz with R, it’s also an exercise
 in finding solutions in package documentation and general
