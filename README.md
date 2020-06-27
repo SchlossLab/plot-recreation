@@ -1,7 +1,9 @@
 
   - [plot-recreation](#plot-recreation)
       - [Exercises](#exercises)
-          - [Formatting text](#formatting-text)
+          - [Italicize text](#italicize-text)
+          - [Color axis text](#color-axis-text)
+          - [Color & bold axis label](#color-bold-axis-label)
           - [Assign colors manually](#assign-colors-manually)
           - [Image on a plot](#image-on-a-plot)
           - [Plot on an image](#plot-on-an-image)
@@ -38,17 +40,15 @@ Re-creating plots to learn cool tricks and practice problem-solving.
 View the plots below and try to write the code that creates them\! There
 are more exercises here than you can probably get to in the time
 allotted. Feel free to jump around and pick ones to work on based on how
-interested you are in learning how to create it. At the end, we’ll each
-share one solution.
+interested you are in learning how to create the plot. At the end, we’ll
+each share one solution.
 
 As much as this is an exercise in data viz with R, it’s also an exercise
 in finding solutions in package documentation and general
 problem-solving. Google is your friend\! If you get stuck, take a look
 at the [hints](hints.md) or send Kelly a message in Slack.
 
-### Formatting text
-
-#### Italics
+### Italicize text
 
 ``` r
 otu_data <- tribble(~otu, ~bact, ~value,
@@ -69,7 +69,7 @@ otu_data %>%
 Source: [Claus Wilke’s talk at
 rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
 
-#### Color axis text
+### Color axis text
 
 ``` r
 # make some fake data
@@ -89,7 +89,7 @@ otu_data %>%
 Source: [Claus Wilke’s talk at
 rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
 
-#### Color & bold axis label
+### Color & bold axis label
 
 ``` r
 # make some fake data

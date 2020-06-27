@@ -39,9 +39,7 @@ As much as this is an exercise in data viz with R, it's also an exercise in find
 Google is your friend!
 If you get stuck, take a look at the [hints](hints.md) or send Kelly a message in Slack.
 
-### Formatting text
-
-#### Italics
+### Italicize text
 
 ```{r otu_italics}
 otu_data <- tribble(~otu, ~bact, ~value,
@@ -59,7 +57,7 @@ otu_data %>%
 
 Source: [Claus Wilke's talk at rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
 
-#### Color axis text
+### Color axis text
 
 ```{r otu_color}
 # make some fake data
@@ -77,7 +75,7 @@ otu_data %>%
 Source: [Claus Wilke's talk at rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
 
 
-#### Color & bold axis label
+### Color & bold axis label
 
 ```{r candidemia_color}
 # make some fake data
