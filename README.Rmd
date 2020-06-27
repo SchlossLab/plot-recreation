@@ -152,7 +152,7 @@ Adapted from: https://github.com/SchlossLab/compositional_data_analysis
 _With great power, comes great responsibility. Use at your own risk!_ 
 
 ```{r plot_on_img}
-rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv', col_types = cols()) %>% 
     filter(distance_mi > 1, as.character(type) == 'Ride', year >= 2019) %>% 
     select(distance_mi, start_date)
 
@@ -177,8 +177,8 @@ Adapted from: https://wilkelab.org/cowplot/articles/drawing_with_on_plots.html#c
 ### Plots in a grid
 
 ```{r plot_grid}
-benchmarks_fit <-read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/2_fit_reference_db/results/benchmarks.tsv?token=AEHR6TPPUNNM245DZ7TUP2C7ADK5E')
-benchmarks_clust <- read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/1_prep_samples/results/benchmarks.tsv?token=AEHR6TNCIGRVN3B5GEVRVNC7ADLAS')
+benchmarks_fit <-read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/2_fit_reference_db/results/benchmarks.tsv?token=AEHR6TPPUNNM245DZ7TUP2C7ADK5E', col_types = cols())
+benchmarks_clust <- read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/1_prep_samples/results/benchmarks.tsv?token=AEHR6TNCIGRVN3B5GEVRVNC7ADLAS', col_types = cols())
 
 plot_box_time <- function(df) {
   df %>%
@@ -212,7 +212,7 @@ Source: https://github.com/SchlossLab/OptiFitAnalysis/tree/master/exploratory/20
 
 ```{r one_title_grid}
 mph_per_kph <- 0.621371
-rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv', col_types = cols()) %>% 
     filter(distance_mi > 1, as.character(type) == 'Ride') %>% 
     mutate(average_speed_mph = average_speed * mph_per_kph) %>% 
     select(distance_mi, average_speed_mph, moving_time_hrs, start_date)
@@ -257,7 +257,7 @@ Adapted from: https://wilkelab.org/cowplot/articles/plot_grid.html#joint-plot-ti
 ### Inset plots
 
 ```{r inset}
-rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv', col_types = cols()) %>% 
     filter(distance_mi > 1, as.character(type) == 'Ride') %>% 
     select(distance_mi, start_date, year)
 

@@ -175,40 +175,10 @@ Adapted from:
 *With great power, comes great responsibility. Use at your own risk\!*
 
 ``` r
-rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv', col_types = cols()) %>% 
     filter(distance_mi > 1, as.character(type) == 'Ride', year >= 2019) %>% 
     select(distance_mi, start_date)
-```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_double(),
-    ##   commute = col_logical(),
-    ##   display_hide_heartrate_option = col_logical(),
-    ##   external_id = col_character(),
-    ##   flagged = col_logical(),
-    ##   from_accepted_tag = col_logical(),
-    ##   gear_id = col_character(),
-    ##   has_heartrate = col_logical(),
-    ##   has_kudoed = col_logical(),
-    ##   heartrate_opt_out = col_logical(),
-    ##   location_country = col_character(),
-    ##   manual = col_logical(),
-    ##   map.id = col_character(),
-    ##   map.summary_polyline = col_character(),
-    ##   name = col_character(),
-    ##   private = col_logical(),
-    ##   start_date = col_datetime(format = ""),
-    ##   start_date_local = col_datetime(format = ""),
-    ##   timezone = col_character(),
-    ##   trainer = col_logical(),
-    ##   type = col_character()
-    ##   # ... with 3 more columns
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
 # source https://www.pinclipart.com/picdir/big/196-1969309_free-bicycle-bike-cartoon-no-background-clipart.png
 bike_img <- here('figures', 'bike.png') %>%
     image_read() %>% 
@@ -233,54 +203,9 @@ Adapted from:
 ### Plots in a grid
 
 ``` r
-benchmarks_fit <-read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/2_fit_reference_db/results/benchmarks.tsv?token=AEHR6TPPUNNM245DZ7TUP2C7ADK5E')
-```
+benchmarks_fit <-read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/2_fit_reference_db/results/benchmarks.tsv?token=AEHR6TPPUNNM245DZ7TUP2C7ADK5E', col_types = cols())
+benchmarks_clust <- read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/1_prep_samples/results/benchmarks.tsv?token=AEHR6TNCIGRVN3B5GEVRVNC7ADLAS', col_types = cols())
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   s = col_double(),
-    ##   `h:m:s` = col_time(format = ""),
-    ##   max_rss = col_double(),
-    ##   max_vms = col_double(),
-    ##   max_uss = col_double(),
-    ##   max_pss = col_double(),
-    ##   io_in = col_double(),
-    ##   io_out = col_double(),
-    ##   mean_load = col_double(),
-    ##   dataset = col_character(),
-    ##   ref = col_character(),
-    ##   region = col_character(),
-    ##   seed = col_double(),
-    ##   method = col_character(),
-    ##   printref = col_logical()
-    ## )
-
-``` r
-benchmarks_clust <- read_tsv('https://raw.githubusercontent.com/SchlossLab/OptiFitAnalysis/master/subworkflows/1_prep_samples/results/benchmarks.tsv?token=AEHR6TNCIGRVN3B5GEVRVNC7ADLAS')
-```
-
-    ## Parsed with column specification:
-    ## cols(
-    ##   s = col_double(),
-    ##   `h:m:s` = col_time(format = ""),
-    ##   max_rss = col_double(),
-    ##   max_vms = col_double(),
-    ##   max_uss = col_double(),
-    ##   max_pss = col_double(),
-    ##   io_in = col_double(),
-    ##   io_out = col_double(),
-    ##   mean_load = col_double(),
-    ##   dataset = col_character(),
-    ##   ref = col_logical(),
-    ##   region = col_logical(),
-    ##   seed = col_double(),
-    ##   method = col_character(),
-    ##   printref = col_logical(),
-    ##   iter = col_logical(),
-    ##   numotus = col_logical()
-    ## )
-
-``` r
 plot_box_time <- function(df) {
   df %>%
     group_by(dataset, method) %>%
@@ -316,41 +241,11 @@ Source:
 
 ``` r
 mph_per_kph <- 0.621371
-rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv', col_types = cols()) %>% 
     filter(distance_mi > 1, as.character(type) == 'Ride') %>% 
     mutate(average_speed_mph = average_speed * mph_per_kph) %>% 
     select(distance_mi, average_speed_mph, moving_time_hrs, start_date)
-```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_double(),
-    ##   commute = col_logical(),
-    ##   display_hide_heartrate_option = col_logical(),
-    ##   external_id = col_character(),
-    ##   flagged = col_logical(),
-    ##   from_accepted_tag = col_logical(),
-    ##   gear_id = col_character(),
-    ##   has_heartrate = col_logical(),
-    ##   has_kudoed = col_logical(),
-    ##   heartrate_opt_out = col_logical(),
-    ##   location_country = col_character(),
-    ##   manual = col_logical(),
-    ##   map.id = col_character(),
-    ##   map.summary_polyline = col_character(),
-    ##   name = col_character(),
-    ##   private = col_logical(),
-    ##   start_date = col_datetime(format = ""),
-    ##   start_date_local = col_datetime(format = ""),
-    ##   timezone = col_character(),
-    ##   trainer = col_logical(),
-    ##   type = col_character()
-    ##   # ... with 3 more columns
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
 # make a plot grid consisting of two panels
 p1 <- ggplot(rides, aes(x = average_speed_mph, y = distance_mi)) + 
   geom_point(colour = "blue") + 
@@ -394,40 +289,10 @@ Adapted from:
 ### Inset plots
 
 ``` r
-rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv') %>% 
+rides <- read_csv('https://raw.githubusercontent.com/kelly-sovacool/strava/master/data/processed/activities.csv', col_types = cols()) %>% 
     filter(distance_mi > 1, as.character(type) == 'Ride') %>% 
     select(distance_mi, start_date, year)
-```
 
-    ## Parsed with column specification:
-    ## cols(
-    ##   .default = col_double(),
-    ##   commute = col_logical(),
-    ##   display_hide_heartrate_option = col_logical(),
-    ##   external_id = col_character(),
-    ##   flagged = col_logical(),
-    ##   from_accepted_tag = col_logical(),
-    ##   gear_id = col_character(),
-    ##   has_heartrate = col_logical(),
-    ##   has_kudoed = col_logical(),
-    ##   heartrate_opt_out = col_logical(),
-    ##   location_country = col_character(),
-    ##   manual = col_logical(),
-    ##   map.id = col_character(),
-    ##   map.summary_polyline = col_character(),
-    ##   name = col_character(),
-    ##   private = col_logical(),
-    ##   start_date = col_datetime(format = ""),
-    ##   start_date_local = col_datetime(format = ""),
-    ##   timezone = col_character(),
-    ##   trainer = col_logical(),
-    ##   type = col_character()
-    ##   # ... with 3 more columns
-    ## )
-
-    ## See spec(...) for full column specifications.
-
-``` r
 plot_point <- rides %>% ggplot(aes(start_date, distance_mi)) +
   geom_point(color='red') +
   theme_minimal_grid(12)
