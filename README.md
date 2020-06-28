@@ -25,6 +25,7 @@ library(here)
 library(magick)
 library(RColorBrewer)
 library(tidyverse)
+set.seed(2020)
 ```
 
 # plot-recreation
@@ -78,8 +79,9 @@ otu_data <- otu_data %>%
            name = glue("<i style='color:{color}'>{bact}</i> (OTU {otu})"))
 # plot it
 otu_data %>% 
-    ggplot(aes(name, value)) +
+    ggplot(aes(name, value, fill=color)) +
     geom_col() + 
+    scale_fill_identity() +
     coord_flip() +
     theme(axis.text.y = element_markdown())
 ```
@@ -114,22 +116,20 @@ Med](https://www.nature.com/articles/s41591-019-0709-7/figures/2)
 ### Assign colors manually
 
 ``` r
+palette = brewer.pal(n = 4, name = "Paired")
+colors = c(A = palette[[2]],
+           B = palette[[3]])
 otu_table <- tibble(
     sample = c("1", "2", "3", "1", "2", "3"),
     otu = c("A", "A", "A", "B", "B", "B"),
     abun = c(5, 15, 6, 15, 5, 2)
-)
-palette = brewer.pal(n = 4, name = "Paired")
-colors = c(
-  A = palette[[2]],
-  B = palette[[3]]
-)
+) %>% mutate(color = colors[otu])
 
-# plot total counts (aboslute abundace)
+# plot abundance
 otu_table %>%
-    ggplot(aes(x = sample, y = abun, fill = otu)) +
+    ggplot(aes(x = sample, y = abun, fill = color)) +
     geom_col() +
-    scale_fill_manual("otu", values=colors) +
+    scale_fill_identity() +
     ylab("Total bacteria") +
     theme_classic()
 ```
