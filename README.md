@@ -18,6 +18,7 @@ library(here)
 library(magick)
 library(RColorBrewer)
 library(tidyverse)
+set.seed(2020)
 ```
 
 ## Exercises
@@ -79,18 +80,25 @@ rstudio::conf(2020)](https://twitter.com/ClausWilke/status/1222944728443809792)
 
 ``` r
 # make some fake data
-otu_data <- otu_data %>% 
-    mutate(color = brewer.pal(4, "Dark2"),
-           name = glue("<i style='color:{color}'>{bact}</i> (OTU {otu})"))
+otu_data <- tribble(~otu, ~bact, ~value,
+                       1, 'Staphylococceae', -0.5,
+                       2, 'Moraxella', 0.5,
+                       3, 'Streptococcus', 2,
+                       4, 'Acinetobacter', 3.0
+                    ) %>% 
+            mutate(color = brewer.pal(4, "Dark2"),
+                   name = glue("<i style='color:{color}'>{bact}</i> (OTU {otu})")
+                   )
 # plot it
 otu_data %>% 
-    ggplot(aes(XXXXXX, XXXXXX)) +
-    XXXXXX() + 
-    XXXXXX() +
-    theme(axis.text.y = XXXXXX)
+    ggplot(aes(name, value, fill=color)) +
+    geom_XXXXXX() + 
+    scale_XXXXXX_identity() +
+    XXXXXX_flip() +
+    XXXXXX(axis.text.y = XXXXXX)
 ```
 
-    ## Error in XXXXXX(): could not find function "XXXXXX"
+    ## Error in geom_XXXXXX(): could not find function "geom_XXXXXX"
 
 ### Color & bold axis label
 
@@ -139,22 +147,20 @@ Adapted from:
 <https://github.com/SchlossLab/compositional_data_analysis>
 
 ``` r
+palette = brewer.pal(n = 4, name = "Paired")
+colors = c(A = palette[[2]],
+           B = palette[[3]])
 otu_table <- tibble(
     sample = c("1", "2", "3", "1", "2", "3"),
     otu = c("A", "A", "A", "B", "B", "B"),
     abun = c(5, 15, 6, 15, 5, 2)
-)
-palette = brewer.pal(n = 4, name = "Paired")
-colors = c(
-  A = palette[[2]],
-  B = palette[[3]]
-)
+) %>% mutate(color = colors[otu])
 
 # plot total counts (aboslute abundace)
 otu_table %>%
     ggplot(aes(x = sample, y = XXXXXX, fill = XXXXXX)) +
     geom_XXXXXX() +
-    scale_XXXXXX_manual("otu", values=colors) +
+    scale_XXXXXX_XXXXXX() +
     XXXXXX("Total bacteria") +
     theme_classic()
 ```
@@ -237,7 +243,7 @@ XXXXXX() +
 
 ![](figures/KEY_plot_grid-1.png)
 
-Source:
+Adapted from:
 <https://github.com/SchlossLab/OptiFitAnalysis/tree/master/exploratory/2020#performance-as-measured-by-runtime>
 
 ``` r
@@ -396,7 +402,8 @@ ggdraw(plot_point + theme_XXXXXX_open(12)) +
 
 ![](figures/KEY_overlay-1.png)
 
-Source: <https://wilkelab.org/cowplot/articles/aligning_plots.html>
+Adapted from:
+<https://wilkelab.org/cowplot/articles/aligning_plots.html>
 
 ``` r
 # make up some non-sensical data
