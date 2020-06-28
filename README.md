@@ -1,20 +1,13 @@
 
-  - [plot-recreation](#plot-recreation)
-      - [Exercises](#exercises)
-          - [Italicize text](#italicize-text)
-          - [Color axis text](#color-axis-text)
-          - [Color & bold axis label](#color-bold-axis-label)
-          - [Assign colors manually](#assign-colors-manually)
-          - [Image on a plot](#image-on-a-plot)
-          - [Plot on an image](#plot-on-an-image)
-          - [Plots in a grid](#plots-in-a-grid)
-          - [One title for two plots](#one-title-for-two-plots)
-          - [Inset plots](#inset-plots)
-          - [Overlaying plots](#overlaying-plots)
-          - [Multi-panel figure](#multi-panel-figure)
-      - [Solutions](#solutions)
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# plot-recreation
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+Re-creating plots to learn cool tricks and practice problem-solving.
 
 ``` r
 library(cowplot)
@@ -26,14 +19,6 @@ library(magick)
 library(RColorBrewer)
 library(tidyverse)
 ```
-
-# plot-recreation
-
-<!-- badges: start -->
-
-<!-- badges: end -->
-
-Re-creating plots to learn cool tricks and practice problem-solving.
 
 ## Exercises
 
@@ -47,6 +32,20 @@ As much as this is an exercise in data viz with R, it’s also an exercise
 in finding solutions in package documentation and general
 problem-solving. Google is your friend\! If you get stuck, take a look
 at the [hints](hints.md) or send Kelly a message in Slack.
+
+  - [Exercises](#exercises)
+      - [Italicize text](#italicize-text)
+      - [Color axis text](#color-axis-text)
+      - [Color & bold axis label](#color-bold-axis-label)
+      - [Assign colors manually](#assign-colors-manually)
+      - [Image on a plot](#image-on-a-plot)
+      - [Plot on an image](#plot-on-an-image)
+      - [Plots in a grid](#plots-in-a-grid)
+      - [One title for two plots](#one-title-for-two-plots)
+      - [Inset plots](#inset-plots)
+      - [Overlaying plots](#overlaying-plots)
+      - [Multi-panel figure](#multi-panel-figure)
+  - [Solutions](#solutions)
 
 ### Italicize text
 
@@ -97,7 +96,8 @@ otu_data %>%
 
 ![](figures/KEY_candidemia_color-1.png)
 
-Inspiration: fig. 2 from Jay’s recent JC paper [Zhai et al 2018 Nature
+Inspiration: fig. 2C from Jay’s recent journal club paper: [Zhai et
+al 2018 Nature
 Med](https://www.nature.com/articles/s41591-019-0709-7/figures/2)
 
 ``` r
