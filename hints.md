@@ -12,11 +12,7 @@ Helpful resources:
 
 <details>
   <summary>Functions</summary>
-  
-  - dplyr
-    - mutate
-  - glue
-    - glue
+
   - ggplot2
     - ggplot
     - geom_col
@@ -31,13 +27,10 @@ Helpful resources:
 <details>
   <summary>Functions</summary>
   
-  - dplyr
-    - mutate
-  - glue
-    - glue
   - ggplot2
     - ggplot
     - geom_col
+    - scale_fill_identity
     - coord_flip
   - ggtext
     - element_markdown
@@ -69,7 +62,7 @@ Helpful resources:
   - ggplot2
     - ggplot
     - geom_col
-    - scale_fill_manual
+    - scale_fill_identity
     - ylab
     - theme_classic
 </details>
@@ -82,7 +75,6 @@ Helpful resources:
   - ggplot2
     - ggplot
     - geom_col
-    - scale_fill_manual
     - ylab
     - theme_classic
   - cowplot
