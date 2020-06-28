@@ -181,6 +181,12 @@ Helpful resources:
     
 </details>
 
+<details>
+  <summary>Theme</summary>
+  
+  All cowplot themes have a transparent background, while ggplot2 themes do not. That's important for layering things behind plots. Order matters!
+</details>
+
 ### Overlaying plots
 
 <details>
@@ -203,6 +209,12 @@ Helpful resources:
     - ggdraw
     - draw_plot
     
+</details>
+
+<details>
+  <summary>Theme</summary>
+  
+  All cowplot themes have a transparent background, while ggplot2 themes do not. That's important for layering things behind plots. Order matters!
 </details>
 
 ### Multi-panel figure
